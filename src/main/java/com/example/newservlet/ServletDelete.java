@@ -15,7 +15,9 @@ public class ServletDelete extends HttpServlet {
 
     Model model = Model.getInstance();
 
-
+protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+    doDelete(request, response);
+}
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         request.setCharacterEncoding("UTF-8");
