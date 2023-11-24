@@ -64,23 +64,26 @@ public class ServletList extends HttpServlet {
                     "</html>");
         }
     }*/
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter pw = response.getWriter();
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         int id = Integer.parseInt(request.getParameter("id"));
 
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset = utf-8");
+        PrintWriter pw= response.getWriter();
+
         if (id == 0) {
+
             pw.print(gson.toJson(model.getFromList()));
-        } else if (id > 0) {
-            if (id > model.getFromList().size()) {
-                pw.print(gson.toJson("Такого пользователя нет :<"));
-            } else {
-                pw.print(gson.toJson(model.getFromList().get(id)));
-            }
-        } else {
-            pw.print(gson.toJson("ID должен быть больше 0"));
+
         }
+        else if(id > 0) {
+            if (id>model.getFromList().size()) {
+                pw.print("Такого пользователя нет!");
+            }
+            else pw.print(gson.toJson(model.getFromList().get(id)));
+        }
+        else
+            pw.print("ID должен быть больше нуля!");
     }
 
 

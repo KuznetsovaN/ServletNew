@@ -15,42 +15,43 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
+
 @WebServlet(urlPatterns = "/update")
-
-
-
 public class ServletUpdate extends HttpServlet {
+    Model model = Model.getInstance();
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
-        doPut(request, response);
-    }
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        StringBuilder sb = new StringBuilder();
+        StringBuffer jb = new StringBuffer();
         String line;
         try {
             BufferedReader reader = request.getReader();
             while ((line = reader.readLine()) != null) {
-                sb.append(line);
+                jb.append(line);
             }
         } catch (Exception e) {
             System.out.println("Error");
         }
-        String jsonString = sb.toString();
+        JsonObject jobj = gson.fromJson(String.valueOf(jb), JsonObject.class);
 
-        JsonObject jobj = gson.fromJson(jsonString, JsonObject.class);
+        request.setCharacterEncoding("UTF-8");
 
-        int id = jobj.get("id").getAsInt();
+        Integer id = jobj.get("id").getAsInt();
         String name = jobj.get("name").getAsString();
         String surname = jobj.get("surname").getAsString();
-        double salary = jobj.get("salary").getAsDouble();
+        Double salary = jobj.get("salary").getAsDouble();
 
-        Model model = Model.getInstance();
+
         User user = new User(name, surname, salary);
-        model.update(user,id);
 
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        response.getWriter().write(jobj.toString());
+        response.setContentType("application/json; charset = utf-8");
+        PrintWriter pw = response.getWriter();
+        if (model.hasUser(id)){
+            model.update(id, user);
+            pw.print(gson.toJson(model.getFromList()));
+        }else {
+            pw.print("Пользователя с id '" + id + "' нет");
+        }
+
     }
 }
