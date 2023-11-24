@@ -13,34 +13,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.concurrent.atomic.AtomicInteger;
 
-@WebServlet(urlPatterns = "/add")
-public class ServletAdd extends HttpServlet {
-    private AtomicInteger counter= new AtomicInteger(5);
+
+@WebServlet(urlPatterns = "/put")
+public class ServletUpdate extends HttpServlet {
     Model model = Model.getInstance();
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
-//    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        response.setContentType("text/html;charset=utf-8");
-//        request.setCharacterEncoding("Utf-8");
-//        PrintWriter pw=response.getWriter();
-//
-//        String name =request.getParameter("name");
-//        String surname = request.getParameter("surname");
-//        double salary = Double.parseDouble(request.getParameter("salary"));
-//
-//        User user = new User(name,surname,salary);
-//        model.add(user,counter.getAndIncrement());
-//
-//        pw.print("<html>"+"<h3> Пользователь"+name+" "+surname+"с зарплатой="+salary+"успешно создан! </h3>"+
-//                "<a href=\'addUser.html\'>Создать нового пользователя</a><br/>"+
-//                "<a href=\'index.jsp\'>Домой</a>"+
-//                "</html>");
-//    }
-
-    protected void doPost (HttpServletRequest request, HttpServletResponse response) throws IOException {
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         StringBuffer jb = new StringBuffer();
         String line;
         try {
@@ -51,22 +31,26 @@ public class ServletAdd extends HttpServlet {
         } catch (Exception e) {
             System.out.println("Error");
         }
-
         JsonObject jobj = gson.fromJson(String.valueOf(jb), JsonObject.class);
 
         request.setCharacterEncoding("UTF-8");
 
+        Integer id = jobj.get("id").getAsInt();
         String name = jobj.get("name").getAsString();
         String surname = jobj.get("surname").getAsString();
         Double salary = jobj.get("salary").getAsDouble();
 
+
         User user = new User(name, surname, salary);
-        model.add(user, counter.getAndIncrement());
 
         response.setContentType("application/json; charset = utf-8");
         PrintWriter pw = response.getWriter();
+        if (model.hasUser(id)){
+            model.edit(id, user);
+            pw.print(gson.toJson(model.getFromList()));
+        }else {
+            pw.print("Пользователя с id '" + id + "' нет");
+        }
 
-
-        pw.print(gson.toJson(model.getFromList()));
     }
 }
