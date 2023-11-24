@@ -16,8 +16,15 @@ import java.io.PrintWriter;
 
 
 @WebServlet(urlPatterns = "/update")
+
+
+
 public class ServletUpdate extends HttpServlet {
     Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException{
+        doPut(request, response);
+    }
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
         StringBuilder sb = new StringBuilder();
         String line;
