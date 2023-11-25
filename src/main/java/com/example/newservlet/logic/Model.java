@@ -66,8 +66,8 @@ public class Model implements Serializable {
         return model;
     }
 
-       public void update(int id, User user){
-       model.put(id, user);
-   }
+    public void update(int id, User user){
+      model.put(id, user);
+    }
 
 }

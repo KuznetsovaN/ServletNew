@@ -26,7 +26,5 @@
 </form>
 
 <a href="addUserForm.html">Создать нового пользователя</a><br/>
-<a href="updUser.html">Изменить пользователя</a><br>
-<a href="delUser.html">Удалить пользователя</a><br/>
 </body>
 </html>
