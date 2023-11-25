@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Map;
+
 @WebServlet(urlPatterns = "/get")
 public class ServletList extends HttpServlet {
     Model model = Model.getInstance();
@@ -29,16 +30,17 @@ public class ServletList extends HttpServlet {
 
         PrintWriter pw = response.getWriter();
 
+        // в этом куске ниже была проблемом с выдаче данных при поиске
         if (id == 0) {
             pw.print(gson.toJson(model.getFromList()));
         } else if (id > 0) {
-            if (id > model.getFromList().size()) {
-                pw.print(gson.fromJson("{\n\"Такого пользователя\" : \"нет\"\n}", JsonObject.class));
-            } else {
+            if (model.getFromList().containsKey(id)) {
                 pw.print(gson.toJson(model.getFromList().get(id)));
+            } else {
+                pw.print(gson.fromJson("{\n\"Ошибка\" : \"Такого пользователя нет\"\n}", JsonObject.class));
             }
         } else {
-            pw.print(gson.fromJson("{\n\"ID должен быть больше\" : \"нуля\"\n}", JsonObject.class));
+            pw.print(gson.fromJson("{\n\"Ошибка\" : \"ID должен быть больше нуля\"\n}", JsonObject.class));
         }
     }
 }

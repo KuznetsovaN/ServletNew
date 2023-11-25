@@ -14,6 +14,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+
+
 @WebServlet("/put")
 public class ServletPut extends HttpServlet {
     Model model = Model.getInstance();
@@ -21,6 +23,7 @@ public class ServletPut extends HttpServlet {
 
     @Override
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.setCharacterEncoding("UTF-8");
         StringBuffer jb = new StringBuffer();
         String line;
         try {
@@ -44,15 +47,14 @@ public class ServletPut extends HttpServlet {
             User user = model.getFromList().get(id);
 
             user.setName(jsonObject.get("name").getAsString());
-            user.setSurName(jsonObject.get("surname").getAsString());
+            user.setSurname(jsonObject.get("surname").getAsString());
             user.setSalary(jsonObject.get("salary").getAsDouble());
 
-            model.update(id, user);
+            model.updateUser(id, user);
 
             pw.print(gson.toJson(model.getFromList()));
         } else {
             pw.print(gson.fromJson("{\n\"Такого пользователя\" : \"нет\"\n}", JsonObject.class));
-            pw.print(gson.toJson(model.getFromList()));
         }
     }
 }
