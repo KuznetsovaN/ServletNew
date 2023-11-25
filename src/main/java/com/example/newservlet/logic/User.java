@@ -2,12 +2,12 @@ package com.example.newservlet.logic;
 
 public class User {
     private String name;
-    private String surname;
+    private String surName;
     private double salary;
 
-    public User(String name, String surname, double salary) {
+    public User(String name, String surName, double salary) {
         this.name = name;
-        this.surname = surname;
+        this.surName = surName;
         this.salary = salary;
     }
 
@@ -19,12 +19,12 @@ public class User {
         this.name = name;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getSurName() {
+        return surName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setSurName(String surName) {
+        this.surName = surName;
     }
 
     public double getSalary() {
